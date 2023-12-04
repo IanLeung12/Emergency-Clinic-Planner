@@ -17,13 +17,28 @@ public class Community {
     }
 
     public boolean collides(int x, int y) {
-        return Math.sqrt(Math.pow((this.x + 40 - x), 2) + Math.pow((this.y + 100 - y), 2)) <= 30;
+        return Math.sqrt(Math.pow((this.x + 38 - x), 2) + Math.pow((this.y + 96 - y), 2)) <= 32;
     }
+
 
 
     public void translate(int x, int y) {
         this.x = this.x + x;
         this.y = this.y + y;
+    }
+
+    public boolean removeConnection(int otherIndex) {
+        return connections.remove(Integer.valueOf(otherIndex));
+    }
+
+    public void decrementConnections(int min) {
+        for (int i = 0; i < connections.size(); i ++) {
+            if (connections.get(i) > min) {
+                connections.set(i, connections.get(i) - 1);
+            } else if (connections.get(i) == min) {
+                connections.remove(Integer.valueOf(min));
+            }
+        }
     }
 
     public ArrayList<Integer> getConnections() {

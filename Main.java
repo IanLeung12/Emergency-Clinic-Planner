@@ -31,7 +31,7 @@ public class Main {
         while (reader.hasNext()) {
             String[] strConnections = reader.nextLine().split(" ", -1);
             System.out.println(Arrays.toString(strConnections));
-            ArrayList<Integer> connections = new ArrayList<>(strConnections.length - 1);
+            ArrayList<Integer> connections = new ArrayList<>(Math.max(1, strConnections.length - 1));
 
             for (int j = 3; j < strConnections.length; j ++) {
                 connections.add(Integer.parseInt(strConnections[j]));
