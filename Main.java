@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {
@@ -23,8 +22,9 @@ public class Main {
         Scanner reader = new Scanner(new File(fileName));
         ArrayList<Community> communities = new ArrayList<>();
 
-        String maptext = "";
         while (reader.hasNext()) {
+
+            // Splits file line into readable format to convert to community
             String[] strConnections = reader.nextLine().split(" ", -1);
             ArrayList<Integer> connections = new ArrayList<>(Math.max(1, strConnections.length - 1));
 

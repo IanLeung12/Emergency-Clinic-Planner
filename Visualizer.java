@@ -35,6 +35,11 @@ public class Visualizer {
         frame.setVisible(true);
     }
 
+    /**
+     * addButtons
+     * makes a JPanel with buttons to edit the city
+     * @return the JPanel with the buttons
+     */
     private JPanel addButtons() {
         JPanel buttonPanel = new JPanel();
         JButton numberButton = new JButton("Toggle numbers");
@@ -79,6 +84,8 @@ public class Visualizer {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                // Saves the city to a file
                 String fileName = JOptionPane.showInputDialog("What is the name of your file (without .txt)");
                 try {
                     PrintWriter output = new PrintWriter(new File(fileName + ".txt"));
@@ -91,6 +98,7 @@ public class Visualizer {
                 }
             }
         });
+
 
         algorithmButton.addActionListener(new ActionListener() {
             @Override
@@ -127,59 +135,65 @@ public class Visualizer {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setStroke(new BasicStroke(3f));
             g.setColor(Color.black);
-            g.setFont(new Font("serif", Font.PLAIN, 32));
-            for (int i = 0; i < communities.size(); i ++) {
-                Community community = communities.get(i);
-                ArrayList<Integer> connections = community.getConnections();
-                for (int c = 0; c < connections.size(); c ++) {
-                    if (connections.get(c) > i) {
-                        Community other = communities.get(connections.get(c));
-                        // Draw a line between the centers of the connected communities
-                        g.drawLine(
-                                community.getX() + 30, community.getY() + 30,
-                                other.getX() + 30, other.getY() + 30
-                        );
+
+            try {
+                for (int i = 0; i < communities.size(); i ++) {
+                    Community community = communities.get(i);
+                    ArrayList<Integer> connections = community.getConnections();
+                    for (int c = 0; c < connections.size(); c ++) {
+                        if (connections.get(c) > i) {
+                            Community other = communities.get(connections.get(c));
+                            // Draw a line between the centers of the connected communities
+                            g.drawLine(
+                                    community.getX() + 30, community.getY() + 30,
+                                    other.getX() + 30, other.getY() + 30
+                            );
+                        }
                     }
                 }
-            }
 
-            if (connectX != -1) {
-                g.setColor(Color.orange);
-                Community community = communities.get(currentComIndex);
-                g.drawLine(community.getX() + 30, community.getY() + 30,
-                        connectX - 8, connectY - 68);
-            }
-
-
-
-            for (int i = 0; i < communities.size(); i ++) {
-                Community community = communities.get(i);
-                if (community.isClinic()) {
-                    g.setColor(lightBlue);
-                } else if (community.isSafe()) {
-                    g.setColor(lightGreen);
-                } else {
-                    g.setColor(lightRed);
+                if (connectX != -1) {
+                    g.setColor(Color.orange);
+                    Community community = communities.get(currentComIndex);
+                    g.drawLine(community.getX() + 30, community.getY() + 30,
+                            connectX - 8, connectY - 68);
                 }
-                drawCircle(community.getX(), community.getY(), 60, g);
-                if (showNumbers) {
-                    g.drawString(String.valueOf(i), community.getX() + 20, community.getY() + 40);
+
+
+
+                for (int i = 0; i < communities.size(); i ++) {
+                    Community community = communities.get(i);
+                    if (community.isClinic()) {
+                        g.setColor(lightBlue);
+                    } else if (community.isSafe()) {
+                        g.setColor(lightGreen);
+                    } else {
+                        g.setColor(lightRed);
+                    }
+                    drawCircle(community.getX(), community.getY(), 60, g);
+                    if (showNumbers) {
+                        g.setFont(new Font("serif", Font.PLAIN, 32));
+                        g.drawString(String.valueOf(i), community.getX() + 20, community.getY() + 40);
+                    }
                 }
+            } catch (Exception e) {
+                System.out.println("Node deleted during displayal");
             }
 
 
+            g.setFont(new Font("serif", Font.PLAIN, 24));
             g.drawString("Left Click: Toggle clinic", 20, 25);
-            g.drawString("Left Click and Drag: Move clinic", 20, 75);
-            g.drawString("Right Click and Drag: Add/Remove connection ", 20, 125);
+            g.drawString("Left Click and Drag: Move clinic", 20, 65);
+            g.drawString("Right Click and Drag: Add/Remove connection ", 20, 105);
             g.setColor(lightBlue);
-            drawCircle(40, 145, 40, g);
-            g.drawString("= Clinic", 100, 175);
+            drawCircle(40, 115, 40, g);
+            g.drawString("= Clinic", 100, 145);
             g.setColor(lightGreen);
-            drawCircle(40, 195, 40, g);
-            g.drawString("= Safe community", 100, 225);
+            drawCircle(40, 155, 40, g);
+            g.drawString("= Safe community", 100, 185);
             g.setColor(lightRed);
-            drawCircle(40, 245, 40, g);
-            g.drawString("= Unsafe community", 100, 275);
+            drawCircle(40, 195, 40, g);
+            g.drawString("= Unsafe community", 100, 225);
         }
 
         private void drawCircle(int x, int y, int d, Graphics g) {
@@ -199,6 +213,7 @@ public class Visualizer {
             this.lastY = 0;
             this.typeClick = "none";
         }
+
 
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -248,9 +263,10 @@ public class Visualizer {
                         communities.get(currentComIndex).getConnections().add(otherIndex);
                         communities.get(otherIndex).getConnections().add(currentComIndex);
                     }
+                    city.checkSafety(communities.get(otherIndex));
+                    city.checkSafety(communities.get(currentComIndex));
                 }
-                city.checkSafety(communities.get(otherIndex));
-                city.checkSafety(communities.get(currentComIndex));
+
             }
             currentComIndex = -1;
             connectX = -1;

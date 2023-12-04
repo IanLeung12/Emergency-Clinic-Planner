@@ -35,7 +35,8 @@ public class Community implements Comparable<Community>{
             if (connections.get(i) > min) {
                 connections.set(i, connections.get(i) - 1);
             } else if (connections.get(i) == min) {
-                connections.remove(Integer.valueOf(min));
+                connections.remove(i);
+                i --;
             }
         }
     }
