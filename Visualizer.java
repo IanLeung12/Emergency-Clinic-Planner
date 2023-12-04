@@ -13,6 +13,7 @@ public class Visualizer {
     private ArrayList<Community> communities;
     private int connectX, connectY;
     private int currentComIndex;
+    private boolean showNumbers;
 
     Visualizer(City city) {
         this.city = city;
@@ -36,11 +37,19 @@ public class Visualizer {
 
     private JPanel addButtons() {
         JPanel buttonPanel = new JPanel();
+        JButton numberButton = new JButton("Toggle numbers");
         JButton addButton = new JButton("Add Community");
         JButton deleteButton = new JButton("Delete Community");
         JButton deleteAllButton = new JButton("Delete all");
         JButton algorithmButton = new JButton("Run algorithm");
         JButton saveButton = new JButton("Save to File");
+
+        numberButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showNumbers = !showNumbers;
+            }
+        });
 
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -53,6 +62,7 @@ public class Visualizer {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                showNumbers = true;
                 city.removeCommunity(Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the community:")));
             }
         });
@@ -85,10 +95,11 @@ public class Visualizer {
         algorithmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                city.addClinics();
+                city.locateClinics();
             }
         });
 
+        buttonPanel.add(numberButton);
         buttonPanel.add(addButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(deleteAllButton);
@@ -151,13 +162,15 @@ public class Visualizer {
                     g.setColor(lightRed);
                 }
                 drawCircle(community.getX(), community.getY(), 60, g);
-                g.drawString(String.valueOf(i), community.getX() + 20, community.getY() + 40);
+                if (showNumbers) {
+                    g.drawString(String.valueOf(i), community.getX() + 20, community.getY() + 40);
+                }
             }
 
 
-            g.drawString("Left Click: Move community (click and drag)", 20, 25);
-            g.drawString("Scroll Wheel Click: Toggle clinic", 20, 75);
-            g.drawString("Right Click: Add/Remove connection (click and drag)", 20, 125);
+            g.drawString("Left Click: Toggle clinic", 20, 25);
+            g.drawString("Left Click and Drag: Move clinic", 20, 75);
+            g.drawString("Right Click and Drag: Add/Remove connection ", 20, 125);
             g.setColor(lightBlue);
             drawCircle(40, 145, 40, g);
             g.drawString("= Clinic", 100, 175);
@@ -189,13 +202,14 @@ public class Visualizer {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            if (e.getButton() == MouseEvent.BUTTON2) {
+            if (e.getButton() == MouseEvent.BUTTON1) {
                 for (int i = 0; i < communities.size(); i++) {
                     if (communities.get(i).collides(e.getX(), e.getY())) {
                         if (communities.get(i).isClinic()) {
                             city.removeClinic(communities.get(i));
                         } else {
                             city.addClinic(communities.get(i));
+
                         }
                     }
                 }
@@ -235,7 +249,8 @@ public class Visualizer {
                         communities.get(otherIndex).getConnections().add(currentComIndex);
                     }
                 }
-                city.checkAll();
+                city.checkSafety(communities.get(otherIndex));
+                city.checkSafety(communities.get(currentComIndex));
             }
             currentComIndex = -1;
             connectX = -1;

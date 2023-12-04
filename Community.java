@@ -1,26 +1,25 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class Community {
+public class Community implements Comparable<Community>{
     private ArrayList<Integer> connections;
     private boolean isClinic;
-    private boolean isSafe;
+    private boolean safe;
     private int x, y;
+    private int unsafeConnections;
 
     Community(int x, int y, boolean isClinic, ArrayList<Integer> connections) {
         this.connections = connections;
         this.isClinic = isClinic;
-        this.isSafe = isClinic;
+        this.safe = isClinic;
         this.x = x;
         this.y = y;
+        this.unsafeConnections = -1;
 
     }
 
     public boolean collides(int x, int y) {
         return Math.sqrt(Math.pow((this.x + 38 - x), 2) + Math.pow((this.y + 96 - y), 2)) <= 32;
     }
-
-
 
     public void translate(int x, int y) {
         this.x = this.x + x;
@@ -41,6 +40,14 @@ public class Community {
         }
     }
 
+    public int getUnsafeConnections() {
+        return unsafeConnections;
+    }
+
+    public void setUnsafeConnections(int unsafeConnections) {
+        this.unsafeConnections = unsafeConnections;
+    }
+
     public ArrayList<Integer> getConnections() {
         return connections;
     }
@@ -54,27 +61,19 @@ public class Community {
     }
 
     public boolean isSafe() {
-        return isSafe;
+        return safe;
     }
 
     public void setSafe(boolean safe) {
-        isSafe = safe;
+        this.safe = safe;
     }
 
     public int getX() {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     @Override
@@ -87,4 +86,9 @@ public class Community {
         return str;
     }
 
+
+    @Override
+    public int compareTo(Community other) {
+        return this.getUnsafeConnections() - other.unsafeConnections;
+    }
 }

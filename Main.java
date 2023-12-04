@@ -16,10 +16,6 @@ public class Main {
             visualizer.refresh();
             Thread.sleep(10);
         }
-
-        
-
-
     }
 
 
@@ -30,7 +26,6 @@ public class Main {
         String maptext = "";
         while (reader.hasNext()) {
             String[] strConnections = reader.nextLine().split(" ", -1);
-            System.out.println(Arrays.toString(strConnections));
             ArrayList<Integer> connections = new ArrayList<>(Math.max(1, strConnections.length - 1));
 
             for (int j = 3; j < strConnections.length; j ++) {
