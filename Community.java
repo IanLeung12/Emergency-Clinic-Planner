@@ -2,12 +2,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Community {
-    private int[] connections;
+    private ArrayList<Integer> connections;
     private boolean isClinic;
     private boolean isSafe;
     private int x, y;
 
-    Community(int[] connections, boolean isClinic, int x, int y) {
+    Community(int x, int y, boolean isClinic, ArrayList<Integer> connections) {
         this.connections = connections;
         this.isClinic = isClinic;
         this.isSafe = isClinic;
@@ -16,7 +16,17 @@ public class Community {
 
     }
 
-    public int[] getConnections() {
+    public boolean collides(int x, int y) {
+        return Math.sqrt(Math.pow((this.x + 40 - x), 2) + Math.pow((this.y + 100 - y), 2)) <= 30;
+    }
+
+
+    public void translate(int x, int y) {
+        this.x = this.x + x;
+        this.y = this.y + y;
+    }
+
+    public ArrayList<Integer> getConnections() {
         return connections;
     }
 
@@ -54,6 +64,12 @@ public class Community {
 
     @Override
     public String toString() {
-        return "\nConnected to: " + Arrays.toString(connections) + (isSafe ? " and is safe" : " and is not safe");
+        String str = "";
+        str = this.x + " " + this.y + " " + this.isClinic;
+        for (int i =0; i < connections.size(); i ++) {
+            str = str + " " + connections.get(i);
+        }
+        return str;
     }
+
 }

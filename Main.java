@@ -4,14 +4,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
-        System.out.println("What is the name of the text file?");
+    public static void main(String[] args) throws FileNotFoundException, InterruptedException {
+        System.out.println("What is the name of the text file? (without .txt)");
 
         Scanner input = new Scanner(System.in);
-        //City city = new City(readFile(input.nextLine()));
-        City city = new City(readFile("map1.txt"));
-        Visualizer visualizer = new Visualizer(city.getCommunities());
+        City city = new City(readFile(input.nextLine() + ".txt"));
         input.close();
+        Visualizer visualizer = new Visualizer(city);
+
+        while(true) {
+            visualizer.refresh();
+            Thread.sleep(10);
+        }
+
         
 
 
@@ -26,19 +31,21 @@ public class Main {
         while (reader.hasNext()) {
             String[] strConnections = reader.nextLine().split(" ", -1);
             System.out.println(Arrays.toString(strConnections));
-            int[] connections = new int[strConnections.length - 1];
+            ArrayList<Integer> connections = new ArrayList<>(strConnections.length - 1);
 
-            for (int j = 0; j < connections.length; j ++) {
-                connections[j] = Integer.parseInt(strConnections[j]);
+            for (int j = 3; j < strConnections.length; j ++) {
+                connections.add(Integer.parseInt(strConnections[j]));
             }
 
-            communities.add(new Community(connections, strConnections[strConnections.length - 1].equals("true"),
-                    (int) (Math.random() * 1200), (int) (Math.random() *  600)));
+            communities.add(new Community(Integer.parseInt(strConnections[0]), Integer.parseInt(strConnections[1]),
+                    strConnections[2].equals("true"), connections));
         }
 
         reader.close();
 
         return communities;
     }
+
+
 
 }

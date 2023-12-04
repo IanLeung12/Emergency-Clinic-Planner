@@ -7,16 +7,14 @@ public class City {
     public City(ArrayList<Community> communities) {
         this.communities = communities;
         System.out.println(communities);
-        this.addClinics();
-        System.out.println(communities);
     }
 
     public void addClinics() {
         for (int i = 0; i < communities.size(); i ++) {
             Community community = communities.get(i);
-            if (community.getConnections().length == 1) {
-                makeClinic(communities.get(community.getConnections()[0]));
-            } else if (community.getConnections().length ==0) {
+            if (community.getConnections().size() == 1) {
+                makeClinic(communities.get(community.getConnections().get(0)));
+            } else if (community.getConnections().size() ==0) {
                 makeClinic(community);
             }
         }
@@ -24,10 +22,10 @@ public class City {
 
     public void makeClinic(Community community) {
         community.setClinic(true);
-        int[] connections = community.getConnections();
+        ArrayList<Integer> connections = community.getConnections();
 
-        for (int i = 0; i < connections.length; i ++) {
-            communities.get(connections[i]).setSafe(true);
+        for (int i = 0; i < connections.size(); i ++) {
+            communities.get(connections.get(i)).setSafe(true);
         }
     }
 
