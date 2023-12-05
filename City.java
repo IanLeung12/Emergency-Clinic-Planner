@@ -24,7 +24,7 @@ public class City {
      * and sets its neighbor with the most unsafe neighbors to a clinic.
      */
     public void locateClinics() {
-        PriorityQueue<Community> unsafeQueue= new PriorityQueue<>();
+        PriorityQueue<Community> unsafeQueue= new PriorityQueue<>(communities.size());
 
         for (int i = 0; i < communities.size(); i ++) {
 
