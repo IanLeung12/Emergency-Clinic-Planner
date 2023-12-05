@@ -133,7 +133,7 @@ public class Visualizer {
             setDoubleBuffered(true);
 
             Graphics2D g2d = (Graphics2D) g;
-            g2d.setStroke(new BasicStroke(3f));
+            g2d.setStroke(new BasicStroke(2.5f));
             g.setColor(Color.black);
 
             try {
@@ -213,7 +213,6 @@ public class Visualizer {
             this.lastY = 0;
             this.typeClick = "none";
         }
-
 
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -302,6 +301,3 @@ public class Visualizer {
     }
 
 } //end of DisplayGrid
-
-
-

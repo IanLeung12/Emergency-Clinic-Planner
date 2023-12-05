@@ -82,7 +82,6 @@ public class City {
                             unsafeQueue.remove(secondCommunity);
                             secondCommunity.setUnsafeConnections(secondCommunity.getUnsafeConnections() - 1);
                             unsafeQueue.offer(secondCommunity);
-
                         } else {
                             secondCommunity.setUnsafeConnections(secondCommunity.getUnsafeConnections() - 1);
                         }
